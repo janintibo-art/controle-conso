@@ -23,7 +23,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - uses: android-actions/setup-android@v3
+      - name: Check Android SDK on GitHub runner
+        run: |
+          echo "ANDROID_HOME=${ANDROID_HOME:-unset}"
+          test -d "${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          echo "sdk.dir=${ANDROID_HOME:-/usr/local/lib/android/sdk}" > local.properties
       - name: Build installable APK
         run: gradle --no-daemon :app:assembleDebug
       - name: Prepare APK for download
